@@ -14,14 +14,14 @@ export class App implements OnInit {
   @ViewChild(BoardComponent)
   board?: BoardComponent;
 
-  protected position = signal<RobotPosition | null>(null);
+  protected initialPosition = signal<RobotPosition | null>(null);
 
   constructor(private robotService: RobotService) {}
 
   ngOnInit() {
     // Get latest position on startup
     this.robotService.getLatestPosition().pipe(take(1)).subscribe((position) => {
-      this.position.set(position);
+      this.initialPosition.set(position);
     });
   }
 

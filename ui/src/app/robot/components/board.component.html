@@ -2,11 +2,10 @@
   <p class="instructions">Click to place the robot, use the buttons or arrows to move</p>
 
   <p #report class="report" [class.sr-only]="!isReportDisplayed()" aria-live="polite">
-    @let pos = position();
-    @if (!pos) {
+    @if (!position) {
       The robot is not currently displayed.
     } @else {
-      The robot is facing {{pos.facing}} at {{pos.y}} north, {{pos.x}} east
+      The robot is facing {{position.facing}} at {{position.y}} north, {{position.x}} east
     }
   </p>
 
@@ -27,6 +26,12 @@
     <button (click)="rotateRobot('counterclockwise')">Left</button>
     <button (click)="moveRobot()">Move</button>
     <button (click)="rotateRobot('clockwise')">Right</button>
-    <button (click)="reportPosition(true)">Report</button>
+    <button (click)="reportPosition()">
+      @if (isReportDisplayed()) {
+        Hide Report
+      } @else {
+        Report
+      }
+    </button>
   </div>
 </main>

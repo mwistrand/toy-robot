@@ -29,7 +29,7 @@ const nextRotatedDirectionMap: Record<Direction, Direction[]> = {
   standalone: true,
 })
 export class BoardComponent {
-  position = input<RobotPosition | null>(null);
+  initialPosition = input<RobotPosition | null>(null);
   onPositionChange = output<RobotPosition>();
   onPlaceRobot = output<void>();
 
@@ -55,12 +55,26 @@ export class BoardComponent {
 
   protected isRobotDisplayed = signal<boolean>(false);
 
+  protected get position(): RobotPosition | null {
+    if (this.currentIndex < 0) {
+      return null;
+    }
+
+    const end =  this.cells.length - 1;
+    const y = Math.floor((end - this.currentIndex) / this.rows.length);
+    const x = (this.columns.length - 1) - (end - this.currentIndex) % this.columns.length;
+    return {
+      x,
+      y,
+      facing: this.currentDirection
+    };
+  }
+
   constructor() {
-    // React to position changes
     effect(() => {
-      const pos = this.position();
+      const pos = this.initialPosition();
       if (pos) {
-        const index = pos.y * this.columns.length + pos.x;
+        const index = ((this.rows.length - 1) - pos.y) * this.columns.length + pos.x;
         this.currentIndex = index;
         requestAnimationFrame(() => {
           const cell = this.getCellByIndex(index);
@@ -98,8 +112,9 @@ export class BoardComponent {
     }
   }
 
-  protected reportPosition(displayReport = false): void {
-    this.isReportDisplayed.set(displayReport);
+  protected reportPosition(): void {
+    const isDisplayed = untracked(this.isReportDisplayed);
+    this.isReportDisplayed.set(!isDisplayed);
   }
 
   protected rotateRobot(direction: ClockDirection) {
@@ -140,10 +155,17 @@ export class BoardComponent {
   private handleKeyDown(event: KeyboardEvent): void {
     const target = event.target as HTMLElement;
     const cell = target.closest('.cell') as HTMLElement;
+    if (event.key === 'Enter') {
+      this.onPlaceRobot.emit();
+      return this.displayRobot(cell);
+    }
+
+    // If a cell has focus but does not contain the robot, then take no action.
+    if (!cell.children || !cell.children[0]?.classList?.contains('robot')) {
+      return;
+    }
     switch (event.key) {
       case 'Enter':
-        this.onPlaceRobot.emit();
-        return this.displayRobot(cell);
       case 'ArrowUp':
         event.preventDefault();
         return this.moveRobotUp(cell);
@@ -263,15 +285,11 @@ export class BoardComponent {
   }
 
   private emitPositionChange() {
-    if (this.currentIndex >= 0) {
-      const x = this.currentIndex % this.columns.length;
-      const y = Math.floor(this.currentIndex / this.columns.length);
-      this.onPositionChange.emit({
-        x,
-        y,
-        facing: this.currentDirection,
-      });
+    const { position } = this;
+    if (!position) {
+      return;
     }
+    this.onPositionChange.emit(position);
   }
 }
 

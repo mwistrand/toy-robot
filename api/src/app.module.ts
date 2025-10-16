@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { RobotModule } from './robot/robot.module';
 import { RobotPosition } from './robot/robot-position.entity';
 
@@ -15,7 +13,7 @@ import { RobotPosition } from './robot/robot-position.entity';
     }),
     RobotModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
