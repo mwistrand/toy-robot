@@ -125,6 +125,10 @@ cd ui
 npm test               # Run all tests
 ```
 
+#### Missing Tests
+
+- The UI's `RobotService` is missing tests, partly due to a lack of time, and partly due to the need to mock out the socket client. Admittedly, integration tests or e2e tests would be far preferable and valuable than mocking out a socket client.
+
 ## Database
 
 The application uses SQLite to store robot position history. The database file (`robot.db`) is created automatically on first run.
