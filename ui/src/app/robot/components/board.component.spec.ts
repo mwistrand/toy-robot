@@ -114,14 +114,14 @@ describe('BoardComponent', () => {
     await new Promise(resolve => setTimeout(resolve, 100));
     try { fixture.detectChanges(); } catch (e) {}
 
-    const robotIcon = compiled.querySelector('.robot-icon');
-    expect(robotIcon?.classList.contains('is-east')).toBe(true);
+    const robot = compiled.querySelector('.robot');
+    expect(robot?.classList.contains('is-east')).toBe(true);
 
     // Click left to rotate counterclockwise
     leftButton.click();
     await new Promise(resolve => setTimeout(resolve, 100));
     try { fixture.detectChanges(); } catch (e) {}
-    expect(robotIcon?.classList.contains('is-east')).toBe(false);
+    expect(robot?.classList.contains('is-east')).toBe(false);
   });
 
   it('should show report when report button is clicked', async () => {
@@ -193,8 +193,7 @@ describe('BoardComponent', () => {
     // Position 17 = x:2, y:3 (3*5 + 2 = 17)
     expect(robotParent?.getAttribute('data-cell-index')).toBe('7');
 
-    const robotIcon = compiled.querySelector('.robot-icon');
-    expect(robotIcon?.classList.contains('is-south')).toBe(true);
+    expect(robot?.classList.contains('is-south')).toBe(true);
   });
 
   describe('Keyboard events', () => {
@@ -303,8 +302,7 @@ describe('BoardComponent', () => {
       const robotParent = robotAfterMove?.closest('.cell');
       expect(robotParent?.getAttribute('data-cell-index')).toBe('10');
 
-      const robotIcon = compiled.querySelector('.robot-icon');
-      expect(robotIcon?.classList.contains('is-west')).toBe(true);
+      expect(robotAfterMove?.classList.contains('is-west')).toBe(true);
     });
 
     it('should move robot right when ArrowRight key is pressed', async () => {
@@ -331,8 +329,7 @@ describe('BoardComponent', () => {
       const robotParent = robotAfterMove?.closest('.cell');
       expect(robotParent?.getAttribute('data-cell-index')).toBe('11');
 
-      const robotIcon = compiled.querySelector('.robot-icon');
-      expect(robotIcon?.classList.contains('is-east')).toBe(true);
+      expect(robotAfterMove?.classList.contains('is-east')).toBe(true);
     });
 
     it('should not move robot up beyond board boundary', async () => {

@@ -13,7 +13,7 @@ import {
 import { Direction, ClockDirection, RobotPosition } from '../models/robot.model';
 
 const INDEX_ATTRIBUTE = 'data-cell-index';
-const POSITION_CLASSES = ['is-east', 'is-west', 'is-south'];
+const POSITION_CLASSES = ['is-east', 'is-west', 'is-south', 'is-north'];
 
 const nextRotatedDirectionMap: Record<Direction, Direction[]> = {
   west: ['south', 'north'],
@@ -126,16 +126,16 @@ export class BoardComponent {
   }
 
   protected setDirection(direction: Direction) {
-    const { icon } = this;
+    const robot = this.robot?.nativeElement;
     this.currentDirection = direction;
-    if (!icon) {
+    if (!robot) {
       return;
     }
     POSITION_CLASSES.forEach((positionClass) => {
       if (positionClass.endsWith(direction)) {
-        icon.classList.add(positionClass);
+        robot.classList.add(positionClass);
       } else {
-        icon.classList.remove(positionClass);
+        robot.classList.remove(positionClass);
       }
     });
   }

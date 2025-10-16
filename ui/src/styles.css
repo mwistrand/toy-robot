@@ -1,4 +1,5 @@
 :root {
+  --background-color: #353839;
   --primary-color: teal;
   --secondary-color: #fff;
 
@@ -17,6 +18,7 @@ body {
 }
 
 body {
+  background: var(--background-color);
   font-family: Helvitica, Arial, sans-serif;
   padding: 1rem;
 }
