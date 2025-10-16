@@ -1,4 +1,5 @@
 :host {
+  --grid-background: #353839;
   --max-board-size: 500px;
   --robot-head-height: calc(var(--max-board-size) / 5 * 0.2);
   --robot-eye-size: calc(var(--robot-head-height) * 0.2);
@@ -27,7 +28,7 @@ main,
 }
 
 .instructions {
-  background: var(--primary-color);
+  background: var(--grid-background);
   border-radius: 16px;
   color: var(--secondary-color);
   margin: 0 0 var(--base-margin) 0;
@@ -36,6 +37,7 @@ main,
 }
 
 .grid {
+  background-color: var(--grid-background);
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   height: var(--max-board-size);
