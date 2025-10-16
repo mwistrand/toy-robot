@@ -21,6 +21,11 @@ body {
   padding: 1rem;
 }
 
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

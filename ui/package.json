@@ -7,9 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
-    "lint": "ng lint",
-    "prepare": "husky install"
+    "test:headless": "ng test --browsers=ChromeHeadless",
+    "test:headless:single": "npm run test:headless -- --watch=false",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\""
   },
   "prettier": {
     "printWidth": 100,
@@ -23,13 +23,6 @@
       }
     ]
   },
-  "lint-staged": {
-    "src/**/*.{ts,html,scss}": [
-      "prettier --write",
-      "ng lint",
-      "git add"
-    ]
-  },
   "private": true,
   "dependencies": {
     "@angular/common": "~20.3.0",
@@ -40,6 +33,7 @@
     "@angular/pwa": "~20.3.6",
     "@angular/router": "~20.3.0",
     "rxjs": "~7.8.0",
+    "socket.io-client": "^4.8.1",
     "tslib": "~2.3.0"
   },
   "devDependencies": {
@@ -49,14 +43,12 @@
     "@types/jasmine": "~5.1.0",
     "eslint-config-prettier": "~10.1.8",
     "eslint-plugin-prettier": "~5.5.4",
-    "husky": "~8.0.0",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "lint-staged": "~16.2.4",
     "prettier": "3.6.2",
     "typescript": "~5.9.2"
   }

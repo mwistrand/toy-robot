@@ -1,34 +1,6 @@
-<main>
-  <p class="instructions">Click to place the robot, use the buttons or arrows to move</p>
+<app-board 
+  [position]="position()"
+  (onPositionChange)="handlePositionChange($event)"
+  (onPlaceRobot)="handlePlaceRobot()"
+></app-board>
 
-  <p #report class="report" [class.sr-only]="!isReportDisplayed()" aria-live="polite">
-    @let _info = info();
-    @if (!_info) {
-      The robot is not current displayed.
-    } @else {
-      The robot is facing {{_info.f}} at {{_info.y}} north, {{_info.x}} east
-    }
-  </p>
-
-  <span class="robot" #robot>
-    @if (isRobotDisplayed()) {
-      <span class="robot-label sr-only">Robot Icon</span>
-      <i class="robot-icon">
-        <span aria-hidden="true" class="robot-icon-head"></span>
-      </i>
-    }
-  </span>
-
-  <div class="grid" (click)="placeRobot($event)" (keydown)="placeRobot($event)">
-    @for (cell of cells; let i = $index; track i) {
-      <div #cell class="cell" tabindex="0" [attr.data-cell-index]="i"></div>
-    }
-  </div>
-
-  <div class="robot-controls">
-    <button (click)="rotateRobot('counterclockwise')">Left</button>
-    <button (click)="moveRobot()">Move</button>
-    <button (click)="rotateRobot('clockwise')">Right</button>
-    <button (click)="reportPosition(true)">Report</button>
-  </div>
-</main>
