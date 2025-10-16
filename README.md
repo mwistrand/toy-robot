@@ -9,6 +9,8 @@ A web-based robot game application that tracks robot position history on a 5x5 g
 - **Database**: SQLite for position history tracking
 - **Communication**: WebSocket connections for real-time updates
 
+_Note:_ both the API and UI use the simplest architecture as the assumption is that this project would never need to scale to the point of justifying a more complex code structure like a hexagonal architecture.
+
 ## Features
 
 - Place a robot on a 5x5 grid
@@ -148,13 +150,6 @@ The application is optimized for a single robot and single user:
 - Creating a new robot clears all position history using `DELETE` without a WHERE clause, which is the most efficient approach for SQLite when clearing entire tables
 - Position updates can handle multiple positions in a single request for batch operations
 - Auto-incrementing IDs are safe since there's no concurrent access
-
-## Offline Support
-
-The UI includes offline support:
-- Position updates are queued in localStorage when offline
-- Queued updates are automatically sent when connection is restored
-- Creating a new robot clears the offline queue
 
 ## API Endpoints (WebSocket)
 
