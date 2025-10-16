@@ -26,7 +26,6 @@ export class RobotGateway {
     @MessageBody() data: CreateRobotDto,
     @ConnectedSocket() client: Socket,
   ) {
-    console.log('Creating robot', data);
     await this.robotService.createRobot();
     client.emit('robotCreated', { success: true });
   }
@@ -36,7 +35,6 @@ export class RobotGateway {
     @MessageBody() data: RobotPositionDto | RobotPositionDto[],
     @ConnectedSocket() client: Socket,
   ) {
-    console.log('Updating robot position', data);
     await this.robotService.addPositions(data);
     const latest = await this.robotService.getLatestPosition();
     this.server.emit('positionUpdated', latest);
@@ -45,7 +43,6 @@ export class RobotGateway {
   @SubscribeMessage('getLatestPosition')
   async handleGetLatestPosition(@ConnectedSocket() client: Socket) {
     const position = await this.robotService.getLatestPosition();
-    console.log('getting latest position', position);
     client.emit('latestPosition', position);
   }
 }

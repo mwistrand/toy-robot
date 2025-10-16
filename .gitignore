@@ -1,10 +1,10 @@
 # compiled output
-/dist
+**/dist
 **/node_modules
-/build
-/tmp
-/out-tsc
-/bazel-out
+**/build
+**/tmp
+**/out-tsc
+**/bazel-out
 
 # Logs
 logs
@@ -69,3 +69,6 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# SQLite DB
+/api/*.db

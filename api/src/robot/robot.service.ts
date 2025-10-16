@@ -13,7 +13,7 @@ export class RobotService {
 
   /**
    * Create a new robot by clearing all existing position history.
-   * 
+   * <p>
    * Performance note: Since we only have a single robot for a single user,
    * clearing the entire table is the most efficient approach. An indexed
    * delete by robotId would only be beneficial with multiple robots, which
