@@ -95,21 +95,19 @@ export class BoardComponent {
     this.handleClick(event);
   }
 
-  protected moveRobot(): void {
+  protected moveRobot(direction: Direction = this.currentDirection): void {
     const cell = this.getCellByIndex(this.currentIndex);
     if (!cell) {
       return;
     }
-    switch (this.currentDirection) {
-      case 'north':
-        return this.moveRobotUp(cell);
-      case 'south':
-        return this.moveRobotDown(cell);
-      case 'west':
-        return this.moveRobotLeft(cell);
-      case 'east':
-        return this.moveRobotRight(cell);
+
+    const nextIndex = this.getNextIndex(cell, direction);
+    if (nextIndex == null) {
+      return;
     }
+
+    this.setDirection(direction);
+    this.displayRobot(this.getCellByIndex(nextIndex));
   }
 
   protected reportPosition(): void {
@@ -168,93 +166,47 @@ export class BoardComponent {
       case 'Enter':
       case 'ArrowUp':
         event.preventDefault();
-        return this.moveRobotUp(cell);
+        return this.moveRobot('north');
       case 'ArrowDown':
         event.preventDefault();
-        return this.moveRobotDown(cell);
+        return this.moveRobot('south');
       case 'ArrowLeft':
         event.preventDefault();
-        return this.moveRobotLeft(cell);
+        return this.moveRobot('west');
       case 'ArrowRight':
         event.preventDefault();
-        return this.moveRobotRight(cell);
+        return this.moveRobot('east');
     }
   }
 
-  private moveRobotUp(cell: HTMLElement | null) {
-    if (!untracked(this.isRobotDisplayed)) {
-      return;
-    }
-    if (!cell || !this.robot) {
-      return;
-    }
+  private getNextIndex(cell: HTMLElement, direction: Direction): number | undefined {
     const currentIndex = parseInt(cell.getAttribute(INDEX_ATTRIBUTE) ?? '-1', 10);
     if (currentIndex < 0) {
       console.error('Logic error: cell is missing index attribute');
     }
-    const previousIndex = currentIndex - this.columns.length;
-    if (previousIndex < 0) {
-      return;
-    }
-    this.setDirection('north');
-    this.displayRobot(this.getCellByIndex(previousIndex));
-  }
 
-  private moveRobotDown(cell: HTMLElement | null) {
-    if (!untracked(this.isRobotDisplayed)) {
-      return;
+    switch (direction) {
+      case 'north': {
+        const previousIndex = currentIndex - this.columns.length;
+        return previousIndex < 0 ? undefined : previousIndex;
+      }
+      case 'south': {
+        const nextIndex = currentIndex + this.columns.length;
+        return nextIndex > this.MAX_CELL_INDEX ? undefined : nextIndex;
+      }
+      case 'east': {
+        if ((currentIndex + 1) % this.columns.length === 0) {
+          return;
+        }
+        return currentIndex + 1;
+      }
+      case 'west': {
+        if (currentIndex % this.columns.length === 0) {
+          return;
+        }
+        return currentIndex - 1;
+      }
     }
-    if (!cell || !this.robot) {
-      return;
-    }
-    const currentIndex = parseInt(cell.getAttribute(INDEX_ATTRIBUTE) ?? '-1', 10);
-    if (currentIndex < 0) {
-      console.error('Logic error: cell is missing index attribute');
-    }
-    const nextIndex = currentIndex + this.columns.length;
-    if (nextIndex > this.MAX_CELL_INDEX) {
-      return;
-    }
-    this.setDirection('south');
-    this.displayRobot(this.getCellByIndex(nextIndex));
-  }
-
-  private moveRobotLeft(cell: HTMLElement | null) {
-    if (!untracked(this.isRobotDisplayed)) {
-      return;
-    }
-    if (!cell || !this.robot) {
-      return;
-    }
-    const currentIndex = parseInt(cell.getAttribute(INDEX_ATTRIBUTE) ?? '-1', 10);
-    if (currentIndex < 0) {
-      console.error('Logic error: cell is missing index attribute');
-    }
-    if (currentIndex % this.columns.length === 0) {
-      return;
-    }
-    const previousIndex = currentIndex - 1;
-    this.setDirection('west');
-    this.displayRobot(this.getCellByIndex(previousIndex));
-  }
-
-  private moveRobotRight(cell: HTMLElement | null) {
-    if (!untracked(this.isRobotDisplayed)) {
-      return;
-    }
-    if (!cell || !this.robot) {
-      return;
-    }
-    const currentIndex = parseInt(cell.getAttribute(INDEX_ATTRIBUTE) ?? '-1', 10);
-    if (currentIndex < 0) {
-      console.error('Logic error: cell is missing index attribute');
-    }
-    if ((currentIndex + 1) % this.columns.length === 0) {
-      return;
-    }
-    const nextIndex = currentIndex + 1;
-    this.setDirection('east');
-    this.displayRobot(this.getCellByIndex(nextIndex));
   }
 
   private getCellByIndex(index: number): HTMLElement | undefined {
