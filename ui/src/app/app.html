@@ -1,6 +1,9 @@
 <app-board
   [initialPosition]="initialPosition()"
+  [latestHistory]="history$ | async"
+  [latestHistoryError]="historyError$ | async"
   (onPositionChange)="handlePositionChange($event)"
   (onPlaceRobot)="handlePlaceRobot()"
+  (onDisplayHistory)="requestHistory()"
 ></app-board>
 

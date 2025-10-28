@@ -1,4 +1,5 @@
 export interface RobotPositionDto {
+  id: number;
   x: number;
   y: number;
   facing: 'north' | 'south' | 'east' | 'west';
