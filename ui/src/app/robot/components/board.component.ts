@@ -30,8 +30,11 @@ const nextRotatedDirectionMap: Record<Direction, Direction[]> = {
 })
 export class BoardComponent {
   initialPosition = input<RobotPosition | null>(null);
+  latestHistory = input<RobotPosition[] | null>(null);
+  latestHistoryError = input<Error | null>(null);
   onPositionChange = output<RobotPosition>();
   onPlaceRobot = output<void>();
+  onDisplayHistory = output<boolean>();
 
   private currentDirection: Direction = 'north';
   private currentIndex = -1;
@@ -86,6 +89,10 @@ export class BoardComponent {
 
   private get icon(): HTMLElement | undefined {
     return this.robot?.nativeElement.querySelector('.robot-icon');
+  }
+
+  protected displayHistory() {
+    this.onDisplayHistory.emit(true);
   }
 
   protected placeRobot(event: Event) {

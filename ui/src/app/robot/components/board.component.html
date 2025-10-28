@@ -1,6 +1,29 @@
 <main>
   <p class="instructions">Click to place the robot, use the buttons or arrows to move</p>
 
+  @let history = latestHistory();
+  @let showHistory = history != null && history.length > 0;
+  @let historyError = latestHistoryError();
+  <section class="history" arial-live="polite" [class.sr-only]="historyError == null && !showHistory">
+    <header>
+      <h1 class="history-header">Movement History</h1>
+    </header>
+
+    @if (historyError) {
+      <p class="error">There was an error retrieving the movement history. Please try again later.</p>
+    }
+
+    @if (showHistory) {
+      <ol class="history-list">
+        @for (record of history; track record.id) {
+          <li class="history-item">
+            [{{record.x}}, {{record.y}}]
+          </li>
+        }
+      </ol>
+    }
+  </section>
+
   <p #report class="report" [class.sr-only]="!isReportDisplayed()" aria-live="polite">
     @if (!position) {
       The robot is not currently displayed.
@@ -27,6 +50,7 @@
     <button (click)="rotateRobot('counterclockwise')">Left</button>
     <button (click)="moveRobot()">Move</button>
     <button (click)="rotateRobot('clockwise')">Right</button>
+    <button (click)="displayHistory()">Display History</button>
     <button (click)="reportPosition()">
       @if (isReportDisplayed()) {
         Hide Report

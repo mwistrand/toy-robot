@@ -1,21 +1,25 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable, fromEvent, of } from 'rxjs';
 import { RobotPosition } from '../models/robot.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RobotService {
+  private http = inject(HttpClient);
+
+  private serviceHost: string;
   private socket: Socket;
 
   constructor() {
     // Use relative path in production, absolute in development
-    const socketUrl = window.location.hostname === 'localhost'
+    this.serviceHost = window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
       : window.location.origin;
 
-    this.socket = io(socketUrl, {
+    this.socket = io(this.serviceHost, {
       autoConnect: true,
     });
   }
@@ -26,6 +30,14 @@ export class RobotService {
     } else {
       console.warn('API not connected...');
     }
+  }
+
+  getLatestHistory(count = 10): Observable<RobotPosition[]> {
+    return this.http.get<RobotPosition[]>(`${this.serviceHost}/robots/history?count=${count}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
   }
 
   updatePosition(position: RobotPosition | RobotPosition[]): void {

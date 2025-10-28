@@ -8,9 +8,10 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - robot-db:/app
+      - robot-db:/data
     environment:
       - NODE_ENV=production
+      - DB_PATH=/data/robot.db
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
